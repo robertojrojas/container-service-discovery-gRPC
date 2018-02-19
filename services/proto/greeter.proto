@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package   = "pb";
+
+message GreeterRequest {
+    enum Language {
+       English = 0;
+       Spanish = 1;
+       French = 2;
+    }
+    Language lang = 1;
+}
+
+message GreeterResponse {
+    string greet = 1;
+}
+
+service GreeterService {
+    rpc Greet(GreeterRequest) returns (GreeterResponse) {}
+ }
+ 

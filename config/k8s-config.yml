@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: name-service
+spec: 
+  selector: 
+    app: name-pod
+  ports:
+    - port: 8090
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: name-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: name-pod
+    spec:
+      containers:
+      - name: name
+        image: robertojrojas/name-service:latest
+        ports:
+        - containerPort: 8090
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: greeter-service
+spec: 
+  selector: 
+    app: greeter-pod
+  ports:
+    - port: 8091
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: greeter-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: greeter-pod
+    spec:
+      containers:
+      - name: name
+        image: robertojrojas/greeter-service:latest
+        ports:
+        - containerPort: 8091
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: webapp-service
+spec: 
+  selector: 
+    app: webapp-pod
+  ports:
+    - name: web
+      port: 8080
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: webapp-pod
+    spec:
+      containers:
+      - name: webapp-pod
+        image: arungupta/webapp-service:latest
+        env:
+        - name: NAME_SERVICE_HOST
+          value: name-service
+        - name: NAME_SERVICE_PORT
+          value: "8080"
+        - name: NAME_SERVICE_PATH
+          value: /
+        - name: GREETER_SERVICE_HOST
+          value: greeter-service
+        - name: GREETER_SERVICE_PORT
+          value: "8080"
+        - name: GREETER_SERVICE_PATH
+          value: /
+        ports:
+        - containerPort: 8080

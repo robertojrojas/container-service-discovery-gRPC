@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_package = "io.robertojrojas.container_service_discovery_grpc.name";
+
+message NameRequest {
+    bool randomName = 1;
+}
+
+message NameResponse {
+    string name = 1;
+}
+
+service NameService {
+    rpc Generate(NameRequest) returns (NameResponse) {}
+ }

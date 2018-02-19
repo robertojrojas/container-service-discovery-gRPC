@@ -4,8 +4,20 @@
 *.so
 *.dylib
 
+**/node_modules
+**/package-lock.json
+**/target
+**/bin
+.DS_Store
+
+
 # Test binary, build with `go test -c`
 *.test
+*.prof
+*.iml
+.classpath
+.project
+.settings
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
