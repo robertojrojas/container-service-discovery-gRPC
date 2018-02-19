@@ -8,10 +8,15 @@ import (
 	"syscall"
 )
 
+var (
+	Version   string
+	BuildTime string
+)
+
 func main() {
 
 	errChan := make(chan error, 1)
-
+	log.Printf("Greeter-Go: %s %s\n", Version, BuildTime)
 	go func() {
 		errChan <- startServer()
 	}()

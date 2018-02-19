@@ -6,19 +6,21 @@ const grpc = require('grpc');
 const express = require('express');
 const async = require('async');
 
-// Constants
-const NAME_PROTO_PATH = '../proto/name.proto';
-const NAME_SRV_PORT = 8090;
-const GREETER_PROTO_PATH = '../proto/greeter.proto';
-const GREETER_SRV_PORT = 8091;
-const PORT = 8080;
-const HOST = '0.0.0.0';
+// Environment Variables
+const NAME_PROTO_PATH     = process.env['NAME_PROTO_PATH'];
+const NAME_SRV_HOST       = process.env['NAME_SERVICE_HOST'];
+const NAME_SRV_PORT       = process.env['NAME_SERVICE_PORT'];
+const GREETER_PROTO_PATH  = process.env['GREETER_PROTO_PATH'];
+const GREETER_SRV_HOST    = process.env['GREETER_SERVICE_HOST'];
+const GREETER_SRV_PORT    = process.env['GREETER_SERVICE_PORT'];
+const PORT                = process.env['WEBAPP_SERVER_PORT'];
+const HOST                = process.env['WEBAPP_SERVER_HOST'];
+const SERVER_CERT         = process.env['SERVER_CERT'];
+const SERVER_PRIVATE_CERT = process.env['SERVER_PRIVATE_CERT'];
+const CLIENT_KEY          = process.env['CLIENT_KEY'];
+
 const nameServiceDef = grpc.load(NAME_PROTO_PATH);
 const greeterServiceDef = grpc.load(GREETER_PROTO_PATH);
-const SERVER_CERT = process.env['SERVER_CERT'];
-const SERVER_PRIVATE_CERT = process.env['SERVER_PRIVATE_CERT'];
-const CLIENT_KEY = process.env['CLIENT_KEY'];
-
 const cacert = fs.readFileSync(SERVER_CERT),
       cert = fs.readFileSync(SERVER_PRIVATE_CERT),
       key = fs.readFileSync(CLIENT_KEY),
@@ -26,10 +28,12 @@ const cacert = fs.readFileSync(SERVER_CERT),
           'private_key': key,
           'cert_chain': cert
 	  };
-	  
 const creds = grpc.credentials.createSsl(cacert, key, cert);
-const nameService = new nameServiceDef.NameService(`localhost:${NAME_SRV_PORT}`, creds);
-const greeterService = new greeterServiceDef.GreeterService(`localhost:${GREETER_SRV_PORT}`, creds);
+console.log("ssl-certs: ", SERVER_CERT, SERVER_PRIVATE_CERT, CLIENT_KEY);
+console.log("nameServiceDef: ", NAME_SRV_HOST, NAME_SRV_PORT);
+console.log("greeterServiceDef: ", GREETER_SRV_HOST, GREETER_SRV_PORT);
+const nameService = new nameServiceDef.NameService(`${NAME_SRV_HOST}:${NAME_SRV_PORT}`, creds);
+const greeterService = new greeterServiceDef.GreeterService(`${GREETER_SRV_HOST}:${GREETER_SRV_PORT}`, creds);
 
 // App
 const app = express();
@@ -37,6 +41,8 @@ app.get('/', (req, res) => {
 
 	//TODO: Add validation for lang range [0-2]
 	const lang = req.query['lang'] || 0;
+
+	console.log("Request: " + req);
 
 	async.parallel([
 		function(callback) { 

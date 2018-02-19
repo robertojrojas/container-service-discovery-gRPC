@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata: 
-  name: name-service
+  name: name.grpcsvr.io
 spec: 
   selector: 
     app: name-pod
@@ -21,14 +21,14 @@ spec:
     spec:
       containers:
       - name: name
-        image: robertojrojas/name-service:latest
+        image: robertojrojas/name-java:1.0.0
         ports:
         - containerPort: 8090
 ---
 apiVersion: v1
 kind: Service
 metadata: 
-  name: greeter-service
+  name: greeter.grpcsvr.io
 spec: 
   selector: 
     app: greeter-pod
@@ -48,14 +48,14 @@ spec:
     spec:
       containers:
       - name: name
-        image: robertojrojas/greeter-service:latest
+        image: robertojrojas/greeter-go:1.0.0
         ports:
         - containerPort: 8091
 ---
 apiVersion: v1
 kind: Service
 metadata: 
-  name: webapp-service
+  name: webapp.grpcsvr.io
 spec: 
   selector: 
     app: webapp-pod
@@ -77,19 +77,15 @@ spec:
     spec:
       containers:
       - name: webapp-pod
-        image: arungupta/webapp-service:latest
+        image: robertojrojas/webapp-nodejs:1.0.0
         env:
         - name: NAME_SERVICE_HOST
-          value: name-service
+          value: name.grpcsvr.io
         - name: NAME_SERVICE_PORT
-          value: "8080"
-        - name: NAME_SERVICE_PATH
-          value: /
+          value: "8090"
         - name: GREETER_SERVICE_HOST
-          value: greeter-service
+          value: greeter.grpcsvr.io
         - name: GREETER_SERVICE_PORT
-          value: "8080"
-        - name: GREETER_SERVICE_PATH
-          value: /
+          value: "8091"
         ports:
         - containerPort: 8080

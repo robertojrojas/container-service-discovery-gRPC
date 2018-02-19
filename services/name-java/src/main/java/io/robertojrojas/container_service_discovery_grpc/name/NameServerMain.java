@@ -67,7 +67,7 @@ public class NameServerMain {
                 .sslContext(getSslContextBuilder().build())
                 .build()
                 .start();
-        logger.info("Server started, listening on " + port);
+        logger.info("Server started, listening on " + host + ":" + port);
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {

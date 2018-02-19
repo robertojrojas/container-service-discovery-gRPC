@@ -1,0 +1,33 @@
+version: '3'
+services:
+  greeter.grpcsvr.io:
+    build: ./services/greeter-go
+    image: robertojrojas/greeter-go:1.0.0
+    volumes:
+      - ./services/ssl-certs:/app/ssl-certs
+    environment:
+      - GREETER_SERVER_HOST=0.0.0.0
+  name.grpcsvr.io:
+    build: ./services/name-java
+    image: robertojrojas/name-java:1.0.0
+    volumes:
+      - ./services/ssl-certs:/app/ssl-certs
+    environment:
+      - NAME_SERVER_HOST=0.0.0.0
+  webapp.grpcsvr.io:
+    build: ./services/webapp-nodejs
+    image: robertojrojas/webapp-nodejs:1.0.0
+    volumes:
+      - ./services/proto:/app/proto
+      - ./services/ssl-certs:/app/ssl-certs
+    ports:
+      - 8081:8080
+    depends_on:
+      - greeter.grpcsvr.io
+      - name.grpcsvr.io
+    environment:
+      - WEBAPP_SERVICE_PORT=8080
+      - NAME_SERVICE_HOST=name.grpcsvr.io
+      - NAME_SERVICE_PORT=8090
+      - GREETER_SERVICE_HOST=greeter.grpcsvr.io
+      - GREETER_SERVICE_PORT=8091
