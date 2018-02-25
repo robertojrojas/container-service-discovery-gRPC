@@ -1,7 +1,7 @@
 FROM alpine:3.4
 MAINTAINER Roberto J. Rojas <robertojrojas@gmail.com>
 
-ADD greeter-go /usr/bin/greeter-go
+ADD greeter-go.bin /usr/bin/greeter-go
 
 ENV GREETER_SERVER_HOST "localhost"
 ENV GREETER_SERVER_PORT "8091"

@@ -1,7 +1,8 @@
 SOURCEDIR=.
 SOURCES := $(shell find $(SOURCEDIR) -name '*.go')
 
-BINARY=greeter-go
+PRJ_NAME=greeter-go
+BINARY=${PRJ_NAME}.bin
 VERSION=1.0.0
 BUILD_TIME=`date +%FT%T%z`
 
@@ -13,10 +14,10 @@ $(BINARY): $(SOURCES)
 	CGO_ENABLED=0 GOOS=linux go build ${LDFLAGS} -o ${BINARY} *.go
 
 docker: clean ${BINARY}
-	docker build -t robertojrojas/${BINARY}:${VERSION} .
+	docker build -t robertojrojas/${PRJ_NAME}:${VERSION} .
 
 docker_clean: clean
-	docker rmi robertojrojas/${BINARY}:${VERSION}
+	docker rmi robertojrojas/${PRJ_NAME}:${VERSION}
 
 .PHONY: install
 install:

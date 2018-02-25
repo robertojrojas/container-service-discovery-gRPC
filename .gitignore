@@ -13,6 +13,7 @@
 
 
 # Test binary, build with `go test -c`
+*.bin
 *.test
 *.prof
 *.iml
