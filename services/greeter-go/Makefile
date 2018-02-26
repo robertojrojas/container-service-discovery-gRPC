@@ -3,7 +3,7 @@ SOURCES := $(shell find $(SOURCEDIR) -name '*.go')
 
 PRJ_NAME=greeter-go
 BINARY=${PRJ_NAME}.bin
-VERSION=1.0.0
+VERSION=1.0.2
 BUILD_TIME=`date +%FT%T%z`
 
 LDFLAGS=-a -tags netgo -ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME} -w" 

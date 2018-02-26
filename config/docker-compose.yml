@@ -1,33 +1,33 @@
 version: '3'
 services:
-  greeter.grpcsvr.io:
+  greeter.svc.cluster.local:
     build: ./services/greeter-go
-    image: robertojrojas/greeter-go:1.0.0
+    image: robertojrojas/greeter-go:1.0.2
     volumes:
       - ./services/ssl-certs:/app/ssl-certs
     environment:
       - GREETER_SERVER_HOST=0.0.0.0
-  name.grpcsvr.io:
+  name.svc.cluster.local:
     build: ./services/name-java
-    image: robertojrojas/name-java:1.0.0
+    image: robertojrojas/name-java:1.0.2
     volumes:
       - ./services/ssl-certs:/app/ssl-certs
     environment:
       - NAME_SERVER_HOST=0.0.0.0
   webapp.grpcsvr.io:
     build: ./services/webapp-nodejs
-    image: robertojrojas/webapp-nodejs:1.0.0
+    image: robertojrojas/webapp-nodejs:1.0.2
     volumes:
       - ./services/proto:/app/proto
       - ./services/ssl-certs:/app/ssl-certs
     ports:
       - 8081:8080
     depends_on:
-      - greeter.grpcsvr.io
-      - name.grpcsvr.io
+      - greeter.svc.cluster.local
+      - name.svc.cluster.local
     environment:
-      - WEBAPP_SERVICE_PORT=8080
-      - NAME_SERVICE_HOST=name.grpcsvr.io
-      - NAME_SERVICE_PORT=8090
-      - GREETER_SERVICE_HOST=greeter.grpcsvr.io
-      - GREETER_SERVICE_PORT=8091
+      - WEBAPP_SERVER_PORT=8080
+      - NAME_SERVER_HOST=name.svc.cluster.local
+      - NAME_SERVER_PORT=8090
+      - GREETER_SERVER_HOST=greeter.svc.cluster.local
+      - GREETER_SERVER_PORT=8091

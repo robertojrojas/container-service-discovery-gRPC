@@ -1,6 +1,6 @@
 {
   "name": "greeter",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Greeter service using Node.js",
   "author": "Arun Gupta",
   "main": "server.js",

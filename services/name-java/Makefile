@@ -2,7 +2,7 @@ SOURCEDIR=.
 SOURCES := $(shell find $(SOURCEDIR) -name '*.java')
 
 BINARY=name-java
-VERSION=1.0.0
+VERSION=1.0.2
 
 .DEFAULT_GOAL: $(BINARY)
 

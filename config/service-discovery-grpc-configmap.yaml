@@ -1,0 +1,27 @@
+apiVersion: v1
+data:
+  greeter.proto: "syntax = \"proto3\";\n\noption go_package   = \"pb\";\n\nmessage
+    GreeterRequest {\n    enum Language {\n       English = 0;\n       Spanish = 1;\n
+    \      French = 2;\n    }\n    Language lang = 1;\n}\n\nmessage GreeterResponse
+    {\n    string greet = 1;\n}\n\nservice GreeterService {\n    rpc Greet(GreeterRequest)
+    returns (GreeterResponse) {}\n }\n "
+  name.proto: |-
+    syntax = "proto3";
+
+    option java_package = "io.robertojrojas.container_service_discovery_grpc.name";
+
+    message NameRequest {
+        bool randomName = 1;
+    }
+
+    message NameResponse {
+        string name = 1;
+    }
+
+    service NameService {
+        rpc Generate(NameRequest) returns (NameResponse) {}
+     }
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: service-discovery-grpc-configmap

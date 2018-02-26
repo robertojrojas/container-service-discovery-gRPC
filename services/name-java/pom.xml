@@ -4,7 +4,7 @@
   <groupId>io.robertojrojas</groupId>
   <artifactId>container_service_discovery_grpc</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
   <name>container_service_discovery_grpc</name>
   <url>http://maven.apache.org</url>
   <properties>

@@ -1,12 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata: 
-  name: name.grpcsvr.io
+  name: name-java
 spec: 
   selector: 
     app: name-pod
   ports:
     - port: 8090
+      protocol: TCP
+  type: NodePort
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -21,19 +23,32 @@ spec:
     spec:
       containers:
       - name: name
-        image: robertojrojas/name-java:1.0.0
+        image: robertojrojas/name-java:1.0.2
+        env:
+          - name: NAME_SERVER_HOST
+            value: "0.0.0.0"
         ports:
         - containerPort: 8090
+        volumeMounts:
+          - name: ssl-certs
+            mountPath: "/app/ssl-certs"
+            readOnly: true
+      volumes:
+        - name: ssl-certs
+          secret:
+            secretName: service-discovery-grpc-secrets
 ---
 apiVersion: v1
 kind: Service
 metadata: 
-  name: greeter.grpcsvr.io
+  name: greeter-go
 spec: 
   selector: 
     app: greeter-pod
   ports:
     - port: 8091
+      protocol: TCP
+  type: NodePort
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -48,21 +63,32 @@ spec:
     spec:
       containers:
       - name: name
-        image: robertojrojas/greeter-go:1.0.0
+        image: robertojrojas/greeter-go:1.0.2
+        env:
+          - name: GREETER_SERVER_HOST
+            value: "0.0.0.0"
         ports:
         - containerPort: 8091
+        volumeMounts:
+          - name: ssl-certs
+            mountPath: "/app/ssl-certs"
+            readOnly: true
+      volumes:
+        - name: ssl-certs
+          secret:
+            secretName: service-discovery-grpc-secrets
 ---
 apiVersion: v1
 kind: Service
 metadata: 
-  name: webapp.grpcsvr.io
+  name: webapp-nodejs
 spec: 
   selector: 
     app: webapp-pod
   ports:
     - name: web
       port: 8080
-  type: LoadBalancer
+  type: NodePort
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -77,15 +103,29 @@ spec:
     spec:
       containers:
       - name: webapp-pod
-        image: robertojrojas/webapp-nodejs:1.0.0
+        image: robertojrojas/webapp-nodejs:1.0.2
         env:
-        - name: NAME_SERVICE_HOST
-          value: name.grpcsvr.io
-        - name: NAME_SERVICE_PORT
+        - name: NAME_SERVER_HOST
+          value: name-java
+        - name: NAME_SERVER_PORT
           value: "8090"
-        - name: GREETER_SERVICE_HOST
-          value: greeter.grpcsvr.io
-        - name: GREETER_SERVICE_PORT
+        - name: GREETER_SERVER_HOST
+          value: greeter-go
+        - name: GREETER_SERVER_PORT
           value: "8091"
         ports:
         - containerPort: 8080
+        volumeMounts:
+          - name: ssl-certs
+            mountPath: "/app/ssl-certs"
+            readOnly: true
+          - name: protobuf-files
+            mountPath: "/app/proto"
+            readOnly: true
+      volumes:
+        - name: ssl-certs
+          secret:
+            secretName: service-discovery-grpc-secrets
+        - name: protobuf-files
+          configMap:
+            name: service-discovery-grpc-configmap

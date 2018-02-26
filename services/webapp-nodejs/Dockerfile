@@ -14,15 +14,16 @@ RUN npm install
 COPY . .
 
 ENV NAME_PROTO_PATH      "/app/proto/name.proto"
-ENV NAME_SERVICE_HOST    "localhost"
-ENV NAME_SERVICE_PORT    "8090"
+ENV NAME_SERVER_HOST    "localhost"
+ENV NAME_SERVER_PORT    "8090"
 ENV GREETER_PROTO_PATH   "/app/proto/greeter.proto"
-ENV GREETER_SERVICE_HOST "localhost"
-ENV GREETER_SERVICE_PORT "8091"
+ENV GREETER_SERVER_HOST "localhost"
+ENV GREETER_SERVER_PORT "8091"
 ENV WEBAPP_SERVER_PORT   "8080"
 ENV WEBAPP_SERVER_HOST   "0.0.0.0"
-ENV SERVER_CERT          "/app/ssl-certs/server.crt"
-ENV SERVER_PRIVATE_CERT  "/app/ssl-certs/client.crt"
+ENV NAME_SERVER_CERT     "/app/ssl-certs/name-server.crt"
+ENV GREETER_SERVER_CERT  "/app/ssl-certs/greeter-server.crt"
+ENV CLIENT_CERT          "/app/ssl-certs/client.crt"
 ENV CLIENT_KEY           "/app/ssl-certs/client.key"
 
 EXPOSE 8080

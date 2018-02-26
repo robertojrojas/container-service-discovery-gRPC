@@ -8,7 +8,7 @@ To generate the Java gRPC sources:
 
 To build and run the Java gRPC server:
 
-`java -cp ./target/container_service_discovery_grpc-1.0.0.jar io.robertojrojas.container_service_discovery_grpc.name.NameServerMain`
+`java -cp ./target/container_service_discovery_grpc-1.0.2.jar io.robertojrojas.container_service_discovery_grpc.name.NameServerMain`
 
 `mvn clean package exec:java -Dexec.mainClass=io.robertojrojas.container_service_discovery_grpc.name.NameServerMain -Dexec.args="$HOME"`
   
